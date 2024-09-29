@@ -283,8 +283,11 @@ namespace Assets.Serialization
             var id = (int)ReadNumber(enclosingId);
             SkipWhitespace();
 
-            // You've got the id # of the object.  Are we done now?
-            throw new NotImplementedException("Fill me in");
+            // You've got the id # of the object.  Check to see if we have already processed the object
+            object o;
+            if (idTable.TryGetValue(id, out o)) {
+                return o;
+            }
 
             // Assuming we aren't done, let's check to make sure there's a { next
             SkipWhitespace();
@@ -305,15 +308,16 @@ namespace Assets.Serialization
                 throw new Exception(
                     $"Expected a type name (a string) in 'type: ...' expression for object id {id}, but instead got {typeName}");
 
-            // Great!  Now what?
-            throw new NotImplementedException("Fill me in");
+            // Create the object and add to the dict
+            o = Utilities.MakeInstance(type);
+            idTable.Add(id, o);
 
             // Read the fields until we run out of them
             while (!End && PeekChar != '}')
             {
                 var (field, value) = ReadField(id);
                 // We've got a field and a value.  Now what?
-                throw new NotImplementedException("Fill me in");
+                Utilities.SetFieldByName(o, field, value);
             }
 
             if (End)
@@ -322,7 +326,7 @@ namespace Assets.Serialization
             GetChar();  // Swallow close bracket
 
             // We're done.  Now what?
-            throw new NotImplementedException("Fill me in");
+            return o;
         }
 
     }
