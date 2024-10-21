@@ -100,10 +100,13 @@ public class BarGraph : MonoBehaviour
 
         // TODO: Call SetWidthPercent to change the width of the bar and set its color
         float widthPercent;
-        if (clampedValue < 0) {
-            widthPercent = -clampedValue/Min;
-        } else { 
-            widthPercent = clampedValue/Max;
+        if (clampedValue < 0)
+        {
+            widthPercent = -clampedValue / Min;
+        }
+        else
+        {
+            widthPercent = clampedValue / Max;
         }
         SetWidthPercent(widthPercent, color);
 
