@@ -30,11 +30,11 @@ public class Enemy : MonoBehaviour
     /// Period the enemy should wait between shots
     /// </summary>
     public float CoolDownTime = 1;
-    
+
     /// <summary>
-    /// The next time an enemy should fire
+    /// Next time the enemy should fire
     /// </summary>
-    public float next_fire_time = 0;
+    private float NextFireTime = 0;
 
     /// <summary>
     /// Prefab for the orb it fires
@@ -79,12 +79,10 @@ public class Enemy : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     void Update()
     {
-        // TODO
-        float time = Time.time;
-        if (time >= next_fire_time)
+        if (Time.time >= NextFireTime)
         {
             Fire();
-            next_fire_time += CoolDownTime;
+            NextFireTime = Time.time + CoolDownTime;
         }
     }
 
@@ -94,11 +92,14 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void Fire()
     {
-        // TODO
-        GameObject go = Instantiate(OrbPrefab, transform.position + player.right, Quaternion.identity);
-        Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
-        rb.velocity = OrbVelocity * HeadingToPlayer;
-        rb.mass = OrbMass;
+        Vector3 orbPosition = transform.position + new Vector3(HeadingToPlayer.x, HeadingToPlayer.y, 0f) * 1f;
+        GameObject orb = Instantiate(OrbPrefab, orbPosition, Quaternion.identity);
+
+        Rigidbody2D orbRb = orb.GetComponent<Rigidbody2D>();
+
+        orbRb.velocity = HeadingToPlayer * OrbVelocity;
+
+        orbRb.mass = OrbMass;
     }
 
     /// <summary>

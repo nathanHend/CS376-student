@@ -12,7 +12,6 @@ public class Orb : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     void OnBecameInvisible()
     {
-        // TODO
         Destroy(gameObject);
     }
 
@@ -23,9 +22,7 @@ public class Orb : MonoBehaviour
     // ReSharper disable once UnusedMember.Local
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // TODO
-        Orb orb = collision.gameObject.GetComponent<Orb>();
-        if (orb == null)
+        if (collision.collider.GetComponent<Orb>() == null)
         {
             Destroy(gameObject);
         }
